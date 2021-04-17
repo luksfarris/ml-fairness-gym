@@ -22,10 +22,11 @@ import zipfile
 from absl import app
 from absl import flags
 from absl import logging
-import file_util
+from mlfairnessgym import file_util
 import numpy as np
 import pandas as pd
 import six
+from io import StringIO
 
 flags.DEFINE_string(
     "movielens_url",
@@ -80,26 +81,29 @@ def read_movielens_data(url):
     downloaded_zip = zipfile.ZipFile(six.BytesIO(data))
     logging.info("Downloaded zip file containing: %s", downloaded_zip.namelist())
     movies_df = pd.read_csv(
-        downloaded_zip.open("ml-1m/movies.dat", "r"),
+        StringIO(
+            downloaded_zip.open("ml-1m/movies.dat", "r").read().decode("iso-8859-1")
+        ),
         sep="::",
         names=["movieId", "title", "genres"],
-        encoding="iso-8859-1",
         engine="python",
     )
 
     users_df = pd.read_csv(
-        downloaded_zip.open("ml-1m/users.dat", "r"),
+        StringIO(
+            downloaded_zip.open("ml-1m/users.dat", "r").read().decode("iso-8859-1")
+        ),
         sep="::",
         names=["userId", "sex", "age", "occupation", "zip_code"],
-        encoding="iso-8859-1",
         engine="python",
     )
 
     ratings_df = pd.read_csv(
-        downloaded_zip.open("ml-1m/ratings.dat", "r"),
+        StringIO(
+            downloaded_zip.open("ml-1m/ratings.dat", "r").read().decode("iso-8859-1")
+        ),
         sep="::",
         names=["userId", "movieId", "rating", "timestamp"],
-        encoding="iso-8859-1",
         engine="python",
     )
 
