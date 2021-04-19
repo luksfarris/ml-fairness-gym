@@ -22,7 +22,7 @@ import pathlib
 import pickle
 import types
 from absl import logging
-import ml_fairness_gym.file_util as file_util
+from mlfairnessgym import file_util
 import numpy as np
 import pandas as pd
 from collections import defaultdict

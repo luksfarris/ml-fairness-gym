@@ -35,8 +35,8 @@ import functools
 from absl import flags
 import attr
 import datetime
-from ml_fairness_gym.environments.recommenders import movie_lens_utils
-from ml_fairness_gym.environments.recommenders import recsim_samplers
+from mlfairnessgym.environments.recommenders import movie_lens_utils
+from mlfairnessgym.environments.recommenders import recsim_samplers
 from gym import spaces
 import numpy as np
 from recsim import document
@@ -44,7 +44,7 @@ from recsim import user
 from recsim.simulator import environment as recsim_environment
 from recsim.simulator import recsim_gym
 
-from ml_fairness_gym.core import Params as Params
+from mlfairnessgym.core import Params as Params
 
 FLAGS = flags.FLAGS
 
@@ -198,9 +198,9 @@ class User(user.AbstractUserState):
             {
                 "user_id": spaces.Discrete(movie_lens_utils.NUM_USERS),
                 "sex": spaces.Discrete(2),
-                "age": spaces.Box(low=1, high=56, dtype=np.int),
-                "occupation": spaces.Box(low=0, high=20, dtype=np.int),
-                "zip_code": spaces.Box(low=1, high=99999),
+                "age": spaces.Box(low=1, high=56, shape=(1,), dtype=np.int),
+                "occupation": spaces.Box(low=0, high=20, shape=(1,), dtype=np.int),
+                "zip_code": spaces.Box(low=1, high=99999, shape=(1,)),
             }
         )
 
@@ -302,9 +302,11 @@ class UserModel(user.AbstractUserModel):
         ]
 
     def is_terminal(self):
-        """Returns a boolean indicating if the session is over."""
+        """Returns a boolean indicating if the session is over.
+        TODO:"""
         state = self._user_state
-        return state.user_scoring_budget < state.total_scored_documents
+        # return state.user_scoring_budget < state.total_scored_documents
+        return state.total_scored_documents >= 50
 
     def reset(self):
         """Resets the current user to their initial state and samples a new user."""
