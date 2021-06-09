@@ -306,7 +306,7 @@ class UserModel(user.AbstractUserModel):
         TODO:"""
         state = self._user_state
         # return state.user_scoring_budget < state.total_scored_documents
-        return state.total_scored_documents >= 50
+        return state.total_scored_documents >= 50 * self._slate_size
 
     def reset(self):
         """Resets the current user to their initial state and samples a new user."""
